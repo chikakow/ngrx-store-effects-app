@@ -68,6 +68,7 @@ export function reducer(
             }
         }
         case fromPizzas.LOAD_PIZZAS_SUCCESS: {
+            action.payload
             return {
                 ...state,
                 loading: false,
