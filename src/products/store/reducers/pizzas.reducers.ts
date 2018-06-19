@@ -1,50 +1,83 @@
-import { Pizza } from '../../models/pizza.model';
-import * as fromPizzas from '../actions/pizzas.action';
+import { Pizza } from "../../models/pizza.model";
+import * as fromPizzas from "../actions/pizzas.action";
 
 export interface PizzaState {
-    data: Pizza[];
-    loaded: boolean,
-    loading: boolean
+  entities: { [id: number]: Pizza };
+  loaded: boolean;
+  loading: boolean;
 }
 
 export const initialState: PizzaState = {
-    data: [],
-    loaded: false,
-    loading: false
+  entities: {},
+  loaded: false,
+  loading: false
 };
 
 export function reducer(
-    state = initialState,
-    action: fromPizzas.PizzasAction
+  state = initialState,
+  action: fromPizzas.PizzasAction
 ): PizzaState {
-    switch(action.type) {
-        case fromPizzas.LOAD_PIZZAS: {
-            return {
-                ...state,
-                loading: true
-            }
-        }
-        case fromPizzas.LOAD_PIZZAS_SUCCESS: {
-            const data = action.payload;  
-            return {
-                ...state,
-                loading: false,
-                loaded: true,
-                data
-            }
-        }
-        case fromPizzas.LOAD_PIZZAS_FAIL: {
-            return {
-                ...state,
-                loading: false,
-                loaded: false
-            }
-        }
-
+  switch (action.type) {
+    case fromPizzas.LOAD_PIZZAS: {
+      return {
+        ...state,
+        loading: true
+      };
     }
-    return state;
+    case fromPizzas.LOAD_PIZZAS_SUCCESS: {
+      const pizzas = action.payload;
+      // we want to convert from this below array model to
+      // [{id: 1, name: 'Peperoni Pizza', toppings: []}, {id: 2, name: 'Veggie Pizza', toppings: []}]
+
+      // this 'entity' model
+      // const pizza: any = {
+      //     1: {
+      //         id: 1,
+      //         name: 'Peperoni Pizza',
+      //         toppings: []
+      //     },
+      //     2: {
+      //         id: 2,
+      //         name: 'Veggie Pizza',
+      //         toppings: []
+      //     }
+      // }
+
+      // const id = 1
+      // pizza[id]
+
+      const entities = pizzas.reduce(
+        (entities: { [id: number]: Pizza }, pizza: Pizza) => {
+            return {
+                ...entities,
+                [pizza.id]: pizza
+            }
+        },
+        {
+          ...state.entities
+        }
+      );
+
+    //   console.log('entity is', entities);
+
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        entities
+      };
+    }
+    case fromPizzas.LOAD_PIZZAS_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false
+      };
+    }
+  }
+  return state;
 }
 
+export const getPizzasEntities = (state: PizzaState) => state.entities;
 export const getPizzasLoading = (state: PizzaState) => state.loading;
 export const getPizzasLoaded = (state: PizzaState) => state.loaded;
-export const getPizzas = (state: PizzaState) => state.data;
