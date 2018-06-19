@@ -13,6 +13,8 @@ export class PizzasEffects {
     constructor(private actions$: Actions, private pizzaService: fromServices.PizzasService) {
     }
 
+    // because of this decorator, the LoadPizzaSuccess will dispatch
+    // if you do, @Effect({ dispatch: false}), then it won't dispatch
     @Effect()
     loadPizzas$ = this.actions$.ofType(pizzaActions.LOAD_PIZZAS)
     .pipe(
