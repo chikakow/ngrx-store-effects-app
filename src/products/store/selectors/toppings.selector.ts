@@ -4,6 +4,8 @@ import * as fromRoot from '../../../app/store';
 import * as fromFeature from "../reducers";
 import * as fromToppings from "../reducers/toppings.reducer";
 
+import { Topping } from "../../models/topping.model";
+
 // {
 //     products: {
 //         pizzas: {},
@@ -36,4 +38,10 @@ export const getToppingsLoaded = createSelector(
 export const getToppingsLoading = createSelector(
     getToppingState,
     fromToppings.getToppingsLoading
+)
+
+// this will be used in pizza selector
+export const getSelectedToppings = createSelector(
+    getToppingState,
+    fromToppings.getSelectedToppings
 )

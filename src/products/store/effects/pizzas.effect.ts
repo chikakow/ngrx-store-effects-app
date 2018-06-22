@@ -25,4 +25,19 @@ export class PizzasEffects {
             )
         })
     )
+
+    @Effect()
+    createPizza$ = this.actions$.ofType(pizzaActions.CREATE_PIZZA)
+    .pipe(
+        // when listening to action, whole action object gets returned but we are only interested in payload 
+        // so 'map' is used here to only retunring the payload property 
+        map((action: pizzaActions.CreatePizza) => action.payload),
+        switchMap((pizza: Pizza) => {
+            return this.pizzaService.createPizza(pizza)
+            .pipe(
+                map((pizza) => new pizzaActions.CreatePizzaSuccess(pizza)),
+                catchError(error => of(new pizzaActions.CreatePizzaFail(error)))
+            )
+        })
+    )
 }
