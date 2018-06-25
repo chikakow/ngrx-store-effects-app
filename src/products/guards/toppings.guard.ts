@@ -10,22 +10,23 @@ import * as fromStore from '../store';
 
 
 @Injectable()
-export class PizzaGuard implements CanActivate {
+export class ToppingsGuard implements CanActivate {
 
     constructor(private store: Store<fromStore.ProductsState>){}
 
     canActivate(): Observable<boolean> {
         return this.checkStore().pipe(
-
+            switchMap(() => of(true)),
+            catchError(() => of(false))
         )
     }
 
     checkStore(): Observable<boolean> {
-        return this.store.select(fromStore.getPizzasLoaded)
+        return this.store.select(fromStore.getToppingsLoaded)
         .pipe(
             tap(loaded => {
                 if(!loaded){
-                    this.store.dispatch(new fromStore.LoadPizzas())
+                    this.store.dispatch(new fromStore.LoadToppings())
                 }
             }),
             // wait for loaded to become loaded = true

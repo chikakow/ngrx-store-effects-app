@@ -39,17 +39,15 @@ export class ProductItemComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new fromStore.LoadToppings());
+    // this.store.dispatch(new fromStore.LoadToppings());
     this.pizza$ = this.store.select(fromStore.getSelectedPizza)
-    // below is not neccesary since pizza-form uses valueChanges subscription.
-    // .pipe(
-    //   tap((pizza: Pizza) => {
-    //     const pizzaExists = !!(pizza && pizza.toppings);
-    //     const toppings = pizzaExists? pizza.toppings.map((topping: Topping) => topping.id): [];
-    //     this.store.dispatch(new fromStore.VisualiseToppings(toppings));
-    //   })
-    // )
-    ;
+    .pipe(
+      tap((pizza: Pizza) => {
+        const pizzaExists = !!(pizza && pizza.toppings);
+        const toppings = pizzaExists? pizza.toppings.map((topping: Topping) => topping.id): [];
+        this.store.dispatch(new fromStore.VisualiseToppings(toppings));
+      })
+    );
     this.toppings$ = this.store.select(fromStore.getAllToppings);
     this.visualise$ = this.store.select(fromStore.getPizzaVisualized);
   }
