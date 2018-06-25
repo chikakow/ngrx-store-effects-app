@@ -76,4 +76,17 @@ export class PizzasEffects {
             )
         })
     )
+
+    //bellow is listening to multiple actions.  it gets fired on either actions.
+    @Effect()
+    deleteUpdatePizzaSuccess$ = this.actions$
+    .ofType(
+        pizzaActions.DELETE_PIZZA_SUCCESS,
+        pizzaActions.UPDATE_PIZZA_SUCCESS
+    )
+    .pipe(
+        map(() => new fromRoot.Go({
+            path:['/products']
+        }))
+    )
 }
