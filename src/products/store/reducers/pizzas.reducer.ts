@@ -90,10 +90,15 @@ export function reducer(
 
     case fromPizzas.DELETE_PIZZA_SUCCESS: {
       const pizza = action.payload;
-      const { [pizza.id]: removed } = state.entities;
+      // below syntax is es6 destructuring on steroid. 
+      // [pizza.id]: removed - extract removed pizza.
+      // ...entities - will spead the rest of the entities minus what's extracted.
+      const { [pizza.id]: removed, ...entities } = state.entities;
+      // below will just logout one removed pizza object 
+      // console.log(removed)
       return {
         ...state,
-
+        entities
       }
     }
   }

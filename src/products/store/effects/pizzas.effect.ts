@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { Effect, Actions } from '@ngrx/effects'; 
 
+import * as fromRoot from '../../../app/store';
 import * as pizzaActions from '../actions/pizzas.action';
 import * as fromServices from '../../services';
 import { Pizza } from '../../models/pizza.model';
@@ -39,6 +40,14 @@ export class PizzasEffects {
                 catchError(error => of(new pizzaActions.CreatePizzaFail(error)))
             )
         })
+    )
+
+    // below is using fromRoot.Go action to navigate
+    @Effect()
+    createPizzaSuccess$ = this.actions$.ofType(pizzaActions.CREATE_PIZZA_SUCCESS)
+    .pipe(
+        map((action: pizzaActions.CreatePizzaSuccess) => action.payload),
+        map((pizza: Pizza) => new fromRoot.Go({path: ['/products', pizza.id]}))
     )
 
     @Effect()

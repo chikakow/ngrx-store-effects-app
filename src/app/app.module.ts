@@ -11,7 +11,7 @@ import {
 import { StoreModule, MetaReducer } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import { reducers, CustomSerializer } from './store'; 
+import { reducers, CustomSerializer, effects } from './store'; 
 
 // not used in production
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -46,7 +46,7 @@ export const ROUTES: Routes = [
     RouterModule.forRoot(ROUTES),
     StoreRouterConnectingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot(effects),
     environment.development ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
